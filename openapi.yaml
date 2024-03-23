@@ -1,0 +1,60 @@
+openapi: 3.0.0
+info:
+  title: JVM Memory Management API
+  version: 1.0.0
+  description: An API to manage and retrieve JVM memory information and perform operations like allocation and garbage collection.
+
+servers:
+  - url: http://localhost:8000
+    description: Local server
+
+paths:
+  /memory:
+    get:
+      summary: Get memory information
+      description: Returns the current JVM memory usage details.
+      responses:
+        '200':
+          description: Successfully retrieved memory information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  maxMemory:
+                    type: string
+                    description: Maximum memory the JVM will attempt to use.
+                  allocatedMemory:
+                    type: string
+                    description: Total memory currently allocated for the JVM.
+                  freeMemory:
+                    type: string
+                    description: Amount of free memory within the allocated memory.
+                  usedMemory:
+                    type: string
+                    description: Amount of used memory within the allocated memory.
+
+  /allocate-memory:
+    get:
+      summary: Allocate memory
+      description: Allocates a specified amount of memory in megabytes.
+      parameters:
+        - in: query
+          name: mb
+          schema:
+            type: integer
+          required: true
+          description: Amount of memory to allocate in megabytes.
+      responses:
+        '200':
+          description: Successfully allocated the specified amount of memory.
+        '400':
+          description: Invalid request, such as specifying a non-integer value for memory.
+
+  /gc:
+    get:
+      summary: Trigger garbage collection
+      description: Suggests the JVM to perform garbage collection.
+      responses:
+        '200':
+          description: Successfully suggested garbage collection to the JVM.
